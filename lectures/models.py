@@ -4,14 +4,14 @@ from cors.models import TimeStampedModel
 
 class Lecture(TimeStampedModel):
     name            = models.CharField(max_length=100)
-    information     = models.VarCharField(max_length=2000)
+    information     = models.TextField()
     level           = models.ForeignKey('Level', on_delete = models.CASCADE)
     price           = models.DecimalField(max_digits=8,decimal_places=2)
     tutor           = models.ForeignKey('users.Tutor', on_delete = models.CASCADE)
-    thumbnail_image = models.FileField(upload_to='')
-    lecture_like    = models.ManyToManyField('users.User')
+    thumbnail_image = models.URLField()
+    lecture_like    = models.ManyToManyField('users.User', related_name = "lecturelike")
     tag             = models.ManyToManyField('Tag')
-    wish_list       = models.ManyToManyField('users.User')
+    wish_list       = models.ManyToManyField('users.User', related_name = "lecturewish")
 
     class Meta:
         db_table = "lectures"
@@ -24,9 +24,10 @@ class Course(models.Model):
         db_table = "courses"
 
 class Video(TimeStampedModel):
-    name    = models.CharField(max_lenght=100)
+    name    = models.CharField(max_length=100)
     course  = models.ForeignKey('Course', on_delete = models.CASCADE)
-    content = models.FileField(upload_to='')
+    content = models.TextField()
+    time    = models.TimeField()
     
     class Meta:
         db_table = "videos"
@@ -50,9 +51,9 @@ class Tag(models.Model):
     class Meta:
         db_table = 'tags'
 
-class Review(TimeStampModel):
+class Review(TimeStampedModel):
     name    = models.CharField(max_length=30)
-    user    = models.ForeignKey(User, on_delete=models.CASCADE)
+    user    = models.ForeignKey('users.User', on_delete=models.CASCADE)
     lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE)
     rating  = models.IntegerField()
 

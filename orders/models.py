@@ -1,6 +1,8 @@
-from django.db import models
+from django.db   import models
 
-class Order(TimeStampModel):
+from cors.models import TimeStampedModel
+
+class Order(TimeStampedModel):
     user    = models.ForeignKey("users.User", on_delete=models.CASCADE)
     lecture = models.ForeignKey("lectures.Lecture", on_delete=models.CASCADE)
 
